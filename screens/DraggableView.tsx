@@ -14,7 +14,7 @@ import {
 } from "react-native-gesture-handler";
 const SIZE = 100;
 const CIRCLE_RADIUS = SIZE * 2;
-type ContextInterface = {
+export type ContextInterface = {
   translateX: number;
   translateY: number;
 };
