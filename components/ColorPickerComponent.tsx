@@ -1,11 +1,21 @@
 import { StyleSheet, Text, View } from "react-native";
-import React from "react";
+import React, { useCallback } from "react";
 import { LinearGradient, LinearGradientProps } from "expo-linear-gradient";
 import {
   PanGestureHandler,
   PanGestureHandlerGestureEvent,
+  TapGestureHandler,
+  TapGestureHandlerGestureEvent,
 } from "react-native-gesture-handler";
-import Animated, { useAnimatedGestureHandler } from "react-native-reanimated";
+import Animated, {
+  interpolateColor,
+  useAnimatedGestureHandler,
+  useAnimatedStyle,
+  useDerivedValue,
+  useSharedValue,
+  withSpring,
+  withTiming,
+} from "react-native-reanimated";
 interface ColorPickerProps extends LinearGradientProps {
   maxWidth?: number;
   onColorChanged?: (color: string | number) => void;
@@ -19,15 +29,91 @@ const ColorPickerComponent: React.FC<ColorPickerProps> = ({
   maxWidth,
   onColorChanged,
 }) => {
-  const panGestureEvent =
-    useAnimatedGestureHandler<PanGestureHandlerGestureEvent>({});
+  const translateX = useSharedValue(0);
+  const translateY = useSharedValue(0);
+  const scale = useSharedValue(1);
+  const adjustTranslateX = useDerivedValue(() => {
+    return Math.max(
+      0,
+      Math.min(translateX.value, (maxWidth || 0) - CIRCLE_PICKER_SIZE)
+    );
+  });
+
+  const onEnd = useCallback(() => {
+    "worklet";
+    translateY.value = withSpring(0);
+    scale.value = withSpring(1);
+  }, []);
+  const panGestureEvent = useAnimatedGestureHandler<
+    PanGestureHandlerGestureEvent,
+    { x: number }
+  >({
+    onStart(_, context) {
+      context.x = adjustTranslateX.value;
+      // translateY.value = withSpring(-CIRCLE_PICKER_SIZE);
+      // scale.value = withSpring(1.2);
+    },
+    onActive(event, context) {
+      translateX.value = event.translationX + context.x;
+    },
+    onEnd,
+  });
+  const rStyle = useAnimatedStyle(() => {
+    return {
+      transform: [
+        { translateX: adjustTranslateX.value },
+        { translateY: translateY.value },
+        { scale: scale.value },
+      ],
+    };
+  });
+  const TapGestureEvent = useAnimatedGestureHandler<
+    TapGestureHandlerGestureEvent,
+    { x: number }
+  >({
+    onStart(event, context) {
+      translateY.value = withSpring(-CIRCLE_PICKER_SIZE);
+      scale.value = withSpring(1.2);
+      translateX.value = withTiming(event.absoluteX - CIRCLE_PICKER_SIZE);
+    },
+
+    onEnd,
+  });
+  const rInternalPickerStyle = useAnimatedStyle(() => {
+    const inputRange = colors.map(
+      (_, index) => (index / colors.length) * (maxWidth || 0)
+    );
+    const backgroundColor = interpolateColor(
+      translateX.value,
+      inputRange,
+      colors
+    );
+    onColorChanged?.(backgroundColor);
+
+    return {
+      backgroundColor,
+    };
+  });
   return (
-    <PanGestureHandler onGestureEvent={panGestureEvent}>
+    <TapGestureHandler onGestureEvent={TapGestureEvent}>
       <Animated.View>
-        <LinearGradient colors={colors} start={start} end={end} style={style} />
-        <View style={styles.picker} />
+        <PanGestureHandler onGestureEvent={panGestureEvent}>
+          <Animated.View>
+            <LinearGradient
+              colors={colors}
+              start={start}
+              end={end}
+              style={style}
+            />
+            <Animated.View style={[styles.picker, rStyle]}>
+              <Animated.View
+                style={[styles.internalPicker, rInternalPickerStyle]}
+              />
+            </Animated.View>
+          </Animated.View>
+        </PanGestureHandler>
       </Animated.View>
-    </PanGestureHandler>
+    </TapGestureHandler>
   );
 };
 

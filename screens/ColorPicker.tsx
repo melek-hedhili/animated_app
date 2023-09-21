@@ -2,6 +2,7 @@ import { StatusBar } from "expo-status-bar";
 import React, { useCallback } from "react";
 import { Dimensions, StyleSheet, Text, View } from "react-native";
 import Animated, {
+  interpolateColor,
   useAnimatedStyle,
   useSharedValue,
 } from "react-native-reanimated";
@@ -27,15 +28,29 @@ const { width } = Dimensions.get("window");
 const CIRCLE_SIZE = width * 0.8;
 const PICKER_WIDTH = width * 0.9;
 const ColorPicker = () => {
+  const pickedColor = useSharedValue<string | number>(COLORS[0]);
+  const onColorChanged = useCallback((color: string | number) => {
+    "worklet";
+    pickedColor.value = color;
+  }, []);
+  const rStyle = useAnimatedStyle(() => {
+    return {
+      backgroundColor: pickedColor.value,
+    };
+  });
   return (
     <>
-      <View style={styles.topContainer} />
+      <View style={styles.topContainer}>
+        <Animated.View style={[styles.circle, rStyle]} />
+      </View>
       <View style={styles.bottomContainer}>
         <ColorPickerComponent
+          maxWidth={PICKER_WIDTH}
           colors={COLORS}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 0 }}
           style={styles.gradient}
+          onColorChanged={onColorChanged}
         />
       </View>
     </>
