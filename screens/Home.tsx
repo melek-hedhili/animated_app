@@ -1,6 +1,6 @@
-import { Button, StyleSheet, View } from "react-native";
+import { Button, StyleSheet, View, FlatList } from "react-native";
 import React from "react";
-const screens = [
+export const screens = [
   "Intro",
   "DraggableView",
   "ScrollViewAnimation",
@@ -8,15 +8,25 @@ const screens = [
   "Pinch",
   "DoubleTap",
   "ColorPicker",
+  "ProgressCircle",
+  "SwipeToDelete",
 ];
 const Home = ({ navigation }: { navigation: any }) => {
   return (
     <View style={styles.container}>
-      {screens.map((screen, index) => (
-        <View key={index}>
-          <Button title={screen} onPress={() => navigation.navigate(screen)} />
-        </View>
-      ))}
+      <FlatList
+        contentContainerStyle={{
+          padding: 10,
+        }}
+        numColumns={2}
+        data={screens}
+        keyExtractor={(_, index) => index.toString()}
+        renderItem={({ item }) => (
+          <View style={{ margin: 5 }}>
+            <Button title={item} onPress={() => navigation.navigate(item)} />
+          </View>
+        )}
+      />
     </View>
   );
 };
@@ -27,6 +37,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
-    justifyContent: "space-evenly",
+    justifyContent: "space-around",
   },
 });
