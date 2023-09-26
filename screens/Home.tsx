@@ -10,6 +10,10 @@ export const screens = [
   "ColorPicker",
   "ProgressCircle",
   "SwipeToDelete",
+  "Menu",
+  "Counter",
+  "Clock",
+  "FlatListScrollAnimation",
 ];
 const Home = ({ navigation }: { navigation: any }) => {
   return (

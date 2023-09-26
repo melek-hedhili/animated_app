@@ -12,6 +12,10 @@ import DoubleTap from "../screens/DoubleTap";
 import ColorPicker from "../screens/ColorPicker";
 import ProgressCircle from "../screens/ProgressCircle";
 import SwipeToDelete from "../screens/SwipeToDelete";
+import Menu from "../screens/Menu";
+import Counter from "../screens/Counter";
+import Clock from "../screens/Clock";
+import FlatListScrollAnimation from "../screens/FlatListScrollAnimation";
 
 const componentMap: any = {
   Intro,
@@ -23,6 +27,10 @@ const componentMap: any = {
   ColorPicker,
   ProgressCircle,
   SwipeToDelete,
+  Menu,
+  Counter,
+  Clock,
+  FlatListScrollAnimation,
 };
 const Stack = createStackNavigator();
 const StackNavigation = () => {
