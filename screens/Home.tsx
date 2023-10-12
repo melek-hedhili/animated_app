@@ -1,5 +1,6 @@
 import { Button, StyleSheet, View, FlatList } from "react-native";
-import React from "react";
+import React, { useEffect } from "react";
+import * as Cellular from "expo-cellular";
 export const screens = [
   "Intro",
   "DraggableView",
@@ -14,8 +15,11 @@ export const screens = [
   "Counter",
   "Clock",
   "FlatListScrollAnimation",
+  "Tarots",
 ];
 const Home = ({ navigation }: { navigation: any }) => {
+  const [status, requestPermission] = Cellular.usePermissions();
+  console.log(status);
   return (
     <View style={styles.container}>
       <FlatList

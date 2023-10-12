@@ -16,6 +16,7 @@ import Menu from "../screens/Menu";
 import Counter from "../screens/Counter";
 import Clock from "../screens/Clock";
 import FlatListScrollAnimation from "../screens/FlatListScrollAnimation";
+import Tarots from "../screens/Tarots";
 
 const componentMap: any = {
   Intro,
@@ -31,6 +32,7 @@ const componentMap: any = {
   Counter,
   Clock,
   FlatListScrollAnimation,
+  Tarots,
 };
 const Stack = createStackNavigator();
 const StackNavigation = () => {
