@@ -1,6 +1,5 @@
-import { StyleSheet } from "react-native";
 import React from "react";
-import { NavigationContainer, ParamListBase } from "@react-navigation/native";
+import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import Intro from "../screens/Intro";
 import DraggableView from "../screens/DraggableView";
@@ -17,6 +16,7 @@ import Counter from "../screens/Counter";
 import Clock from "../screens/Clock";
 import FlatListScrollAnimation from "../screens/FlatListScrollAnimation";
 import Tarots from "../screens/Tarots";
+import Switch from "../screens/Switch";
 
 const componentMap: any = {
   Intro,
@@ -33,6 +33,7 @@ const componentMap: any = {
   Clock,
   FlatListScrollAnimation,
   Tarots,
+  Switch,
 };
 const Stack = createStackNavigator();
 const StackNavigation = () => {
@@ -53,5 +54,3 @@ const StackNavigation = () => {
 };
 
 export default StackNavigation;
-
-const styles = StyleSheet.create({});

@@ -1,12 +1,9 @@
-import { StatusBar } from "expo-status-bar";
 import React, { useCallback } from "react";
-import { Dimensions, StyleSheet, Text, View } from "react-native";
+import { Dimensions, StyleSheet, View } from "react-native";
 import Animated, {
-  interpolateColor,
   useAnimatedStyle,
   useSharedValue,
 } from "react-native-reanimated";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
 import ColorPickerComponent from "../components/ColorPickerComponent";
 
 const COLORS = [

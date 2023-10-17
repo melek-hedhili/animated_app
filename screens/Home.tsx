@@ -16,10 +16,9 @@ export const screens = [
   "Clock",
   "FlatListScrollAnimation",
   "Tarots",
+  "Switch",
 ];
 const Home = ({ navigation }: { navigation: any }) => {
-  const [status, requestPermission] = Cellular.usePermissions();
-  console.log(status);
   return (
     <View style={styles.container}>
       <FlatList
