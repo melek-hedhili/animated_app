@@ -1,6 +1,6 @@
 import { Button, StyleSheet, View, FlatList } from "react-native";
-import React, { useEffect } from "react";
-import * as Cellular from "expo-cellular";
+import React from "react";
+
 export const screens = [
   "Intro",
   "DraggableView",
@@ -17,6 +17,8 @@ export const screens = [
   "FlatListScrollAnimation",
   "Tarots",
   "Switch",
+  "CircularCarousel",
+  "Spotify",
 ];
 const Home = ({ navigation }: { navigation: any }) => {
   return (

@@ -17,6 +17,8 @@ import Clock from "../screens/Clock";
 import FlatListScrollAnimation from "../screens/FlatListScrollAnimation";
 import Tarots from "../screens/Tarots";
 import Switch from "../screens/Switch";
+import CircularCarousel from "../screens/CircularCarousel";
+import Spotify from "../screens/Spotify";
 
 const componentMap: any = {
   Intro,
@@ -34,6 +36,8 @@ const componentMap: any = {
   FlatListScrollAnimation,
   Tarots,
   Switch,
+  CircularCarousel,
+  Spotify,
 };
 const Stack = createStackNavigator();
 const StackNavigation = () => {
