@@ -10,12 +10,14 @@ import SwitchTheme from "../screens/SwitchTheme";
 import Pinch from "../screens/Pinch";
 import DoubleTap from "../screens/DoubleTap";
 import ColorPicker from "../screens/ColorPicker";
+import Menu from "../screens/Menu";
 const Stack = createStackNavigator();
 const StackNavigation = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Home">
         <Stack.Screen name="Home" component={Home} />
+        <Stack.Screen name="Menu" component={Menu} />
         <Stack.Screen name="Intro" component={Intro} />
         <Stack.Screen name="SwitchTheme" component={SwitchTheme} />
         <Stack.Screen name="DraggableView" component={DraggableView} />
