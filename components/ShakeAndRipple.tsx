@@ -7,54 +7,53 @@ import Animated, {
   withRepeat,
 } from "react-native-reanimated";
 import { AntDesign } from "@expo/vector-icons";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 interface ShakeAndRippleProps {
   touch: boolean;
   start: boolean;
+  onPress?: () => void;
 }
 
-const ShakeAndRipple: React.FC<ShakeAndRippleProps> = ({ touch, start }) => {
+const ShakeAndRipple: React.FC<ShakeAndRippleProps> = ({
+  touch,
+  start,
+  onPress,
+}) => {
   const shake = useSharedValue(0);
   const rippleScale = useSharedValue(0);
 
   React.useEffect(() => {
-    if (touch) {
+    if (touch && start) {
       shake.value = withRepeat(withTiming(1, { duration: 100 }), 4, true);
-    } else {
+    } else if (!touch && start) {
       rippleScale.value = withTiming(1.5, { duration: 600 }, () => {
         rippleScale.value = 0;
       });
     }
-  }, [touch]);
+  }, [touch, start]);
 
-  const shakeStyle = useAnimatedStyle(() => {
-    return {
-      transform: [{ translateX: shake.value * 10 }],
-    };
-  });
+  const shakeStyle = useAnimatedStyle(() => ({
+    transform: [{ translateX: shake.value * 10 }],
+  }));
 
-  const rippleStyle = useAnimatedStyle(() => {
-    return {
-      transform: [{ scale: rippleScale.value }],
-      opacity: 1 - rippleScale.value,
-    };
-  });
+  const rippleStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: rippleScale.value }],
+    opacity: 1 - rippleScale.value,
+  }));
 
   return (
     <View style={styles.container}>
       <Animated.View style={[styles.ripple, rippleStyle]} />
-      <Animated.View style={[styles.heartIcon, shakeStyle]}>
-        {/* <HeartIcon fill="transparent" size={40} /> */}
-        {!touch ? (
-          <>
-            <AntDesign name="heart" size={40} color="green" />
-          </>
-        ) : (
-          <>
-            <AntDesign name="hearto" size={40} color="black" />
-          </>
-        )}
-      </Animated.View>
+      <TouchableOpacity onPress={onPress} disabled={start}>
+        <Animated.View style={[styles.heartIcon, shakeStyle]}>
+          <AntDesign
+            name={touch ? "hearto" : "heart"}
+            size={40}
+            color={touch ? "black" : "green"}
+          />
+        </Animated.View>
+      </TouchableOpacity>
     </View>
   );
 };

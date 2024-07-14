@@ -11,7 +11,7 @@ export const screens = [
   "ColorPicker",
   "ProgressCircle",
   "SwipeToDelete",
-  "Menu",
+
   "Counter",
   "Clock",
   "FlatListScrollAnimation",

@@ -1,51 +1,50 @@
-import { useState } from "react";
-import { View, StyleSheet, TouchableOpacity, Text } from "react-native";
+import React, { useState, useMemo, useCallback } from "react";
+import { View, StyleSheet } from "react-native";
 import ShakeAndRipple from "../components/ShakeAndRipple";
+import Heart from "./Heart";
 
-const Spotify = () => {
-  const [touch, setTouch] = useState(false);
-  const [start, setStart] = useState(false);
+interface HeartData {
+  size: number;
+  duration: number;
+  color: string;
+  x: number;
+  y: number;
+}
 
-  const handlePress = () => {
-    setTouch((prev) => !prev);
-    setStart((prev) => !prev);
-    setTimeout(() => setStart(false), 1000); // Reset start after animation duration
-  };
-  const heartsData = Array.from({ length: 6 }, (_, i) => {
-    const angle = (i / 6) * 2 * Math.PI;
-    return {
-      size: 20 + Math.cos(angle) * 10,
-      duration: 1000,
-      color: `rgba(255, 0, 0, ${0.5 + Math.cos(angle) * 0.5})`,
-      x: Math.cos(angle) * 30,
-      y: -Math.sin(angle) * 30,
-    };
-  });
+const Spotify: React.FC = () => {
+  const [state, setState] = useState({ touch: true, start: false });
+
+  const handlePress = useCallback(() => {
+    setState((prev) => ({ touch: !prev.touch, start: !prev.start }));
+    setTimeout(() => setState((prev) => ({ ...prev, start: false })), 1000);
+  }, []);
+  const shouldDisplayHearts = state.start && !state.touch;
+  const heartsData: HeartData[] = useMemo(
+    () =>
+      Array.from({ length: 10 }, (_, i) => ({
+        size: scaleValue(i, 3),
+        duration: 1000,
+        color: "green",
+        x: -60 + i * 12,
+        y: -50 + scaleVertical(i, 2),
+      })),
+    []
+  );
+
   return (
     <View style={styles.container}>
-      <TouchableOpacity onPress={handlePress} style={styles.button}>
-        <Text style={styles.buttonText}>Press</Text>
-      </TouchableOpacity>
-      <ShakeAndRipple touch={touch} start={start} />
-      {/* <View
-        style={{
-          backgroundColor: "green",
-          width: "100%",
-          height: 200,
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        {start &&
-          heartsData.map((heart, index) => (
-            <Heart key={index} {...heart} start={start} />
-          ))}
-      </View> */}
+      <ShakeAndRipple
+        touch={state.touch}
+        start={state.start}
+        onPress={handlePress}
+      />
+      {shouldDisplayHearts &&
+        heartsData.map((heart, index) => (
+          <Heart key={index} {...heart} start={state.start} />
+        ))}
     </View>
   );
 };
-
-export default Spotify;
 
 const styles = StyleSheet.create({
   container: {
@@ -54,14 +53,24 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "#F5FCFF",
   },
-  button: {
-    padding: 10,
-    backgroundColor: "#007BFF",
-    borderRadius: 5,
-    marginBottom: 20,
-  },
-  buttonText: {
-    color: "#FFFFFF",
-    fontSize: 16,
-  },
 });
+
+export default Spotify;
+
+function scaleValue(idx: number, total: number): number {
+  const x = idx / total;
+  const y = (Math.cos(2 * Math.PI * x) + 1) / 2.0;
+  return 10 + 15 * y;
+}
+
+function scaleSaturation(idx: number, total: number): number {
+  const x = idx / total;
+  const y = Math.cos(Math.PI * x);
+  return 0.3 + y;
+}
+
+function scaleVertical(idx: number, total: number): number {
+  const x = idx / total;
+  const y = Math.sin(Math.PI * x);
+  return 5 + 30 * y;
+}
