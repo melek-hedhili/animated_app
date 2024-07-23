@@ -13,12 +13,16 @@ interface ShakeAndRippleProps {
   touch: boolean;
   start: boolean;
   onPress?: () => void;
+  size?: number;
+  color?: string;
 }
 
 const ShakeAndRipple: React.FC<ShakeAndRippleProps> = ({
   touch,
   start,
   onPress,
+  size = 40,
+  color = "red",
 }) => {
   const shake = useSharedValue(0);
   const rippleScale = useSharedValue(0);
@@ -34,7 +38,7 @@ const ShakeAndRipple: React.FC<ShakeAndRippleProps> = ({
   }, [touch, start]);
 
   const shakeStyle = useAnimatedStyle(() => ({
-    transform: [{ translateX: shake.value * 10 }],
+    transform: [{ translateX: shake.value * (size / 4) }],
   }));
 
   const rippleStyle = useAnimatedStyle(() => ({
@@ -44,13 +48,23 @@ const ShakeAndRipple: React.FC<ShakeAndRippleProps> = ({
 
   return (
     <View style={styles.container}>
-      <Animated.View style={[styles.ripple, rippleStyle]} />
+      <Animated.View
+        style={[styles.ripple, rippleStyle, { borderColor: color }]}
+      />
       <TouchableOpacity onPress={onPress} disabled={start}>
-        <Animated.View style={[styles.heartIcon, shakeStyle]}>
+        <Animated.View
+          style={[
+            {
+              width: size,
+              height: size,
+            },
+            shakeStyle,
+          ]}
+        >
           <AntDesign
             name={touch ? "hearto" : "heart"}
-            size={40}
-            color={touch ? "black" : "green"}
+            size={size}
+            color={touch ? "black" : color}
           />
         </Animated.View>
       </TouchableOpacity>
@@ -73,7 +87,6 @@ const styles = StyleSheet.create({
     height: 100,
     borderRadius: 50,
     borderWidth: 2,
-    borderColor: "green",
   },
 });
 
