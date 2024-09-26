@@ -1,10 +1,10 @@
 import { StyleSheet, View } from "react-native";
-import Spotify from "./Spotify";
+import SpotifyHeartTest from "./test";
 
 const Switch = () => {
   return (
     <View style={styles.container}>
-      <Spotify onChange={(like) => console.log(like)} size={15} color="green" />
+      <SpotifyHeartTest />
     </View>
   );
 };
